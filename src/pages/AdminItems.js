@@ -3,7 +3,7 @@ import React from 'react'
 export default function AdminItems(props) {
   const {title,description,posts = []} = props;
   return (
-    <div className="card" style={{marginLeft : 100, marginTop : 100}}>
+    <div className="card" style={{marginLeft : 450, marginTop : 10, marginRight : 400,}}>
   {/* <img src="..." className="card-img-top" alt="..."/> */}
   {/* <div className="card-body">
     <h5 className="card-title">{title}</h5>
@@ -14,7 +14,7 @@ export default function AdminItems(props) {
       <p>{description}</p>
       <ul>
         {posts.map((post,index) => (
-          <li key={index}>
+          <li style={{listStyleType : "decimal"}} key={index}>
             <h3>{post.title}</h3>
             <p>{post.message}</p>
           </li>

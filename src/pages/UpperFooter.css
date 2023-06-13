@@ -1,0 +1,48 @@
+.dv{
+  padding-top: 280px;
+}
+.lst{
+  list-style-type: none;
+}
+.over{
+  text-decoration: none;
+  color: black;
+}
+.over:hover{
+  color:rgba(34, 132, 170, 0.562);
+}
+.footerSection{
+  padding-top: 50px;
+  padding-bottom: 80px;
+}
+#sparrow{
+  margin-top: 80px;
+  display: flex;
+}
+#last{
+  border-left: 2px solid black;
+}
+#header1{
+  text-transform: uppercase;
+  font-family: 'Six Caps',sans-serif !important;
+  font-size: 5rem;
+}
+@media screen and (max-width: 990px) {
+  
+#header1{
+  font-size: 4.5rem;
+}
+#last{
+  border-left: 0px solid black;
+}
+}
+@media screen and (max-width: 425px) { 
+   #last{
+    border-left: 0px solid black;
+  }
+}
+@media screen and (max-width: 300px) {
+  #header1{
+    font-size: 3.5rem;
+  }
+}

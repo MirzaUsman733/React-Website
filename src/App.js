@@ -1,4 +1,5 @@
-import React,{ useState, useEffect} from "react";
+import React,{useState,useEffect} from "react";
+// import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { auth } from "./firebase";
 import { ToastContainer } from 'react-toastify';
@@ -16,6 +17,8 @@ import BlogView from './pages/BlogView'
 import "./App.css";
 import 'animate.css';
 import 'react-toastify/dist/ReactToastify.css';
+
+// import { setUser, clearUser } from './pages/authSlice';
 // import UserView from "./pages/UserView";
 
 function App() {
@@ -34,6 +37,8 @@ function App() {
       unsubscribe();
     };
   }, []);
+
+
   return (
     <>
       <BrowserRouter>

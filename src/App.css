@@ -7,6 +7,12 @@
 main{
   flex: 1 0 auto;
 }
+.edt{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+}
 .frm{
   width: 350px;
   height: 200px;

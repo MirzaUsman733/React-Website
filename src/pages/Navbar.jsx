@@ -1,10 +1,13 @@
 import React,{useState,useEffect} from "react";
+// import { useSelector,useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+// import { setUser, clearUser } from './authSlice';
+
 export default function Navbar() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -21,7 +24,21 @@ export default function Navbar() {
       unsubscribe();
     };
   }, []);
-  
+  // const user = useSelector((state) => state.auth);
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       dispatch(setUser(user));
+  //     } else {
+  //       dispatch(clearUser());
+  //     }
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [dispatch]);  
   const handleSignout = () => {
     signOut(auth)
       .then(() => {
@@ -40,7 +57,7 @@ export default function Navbar() {
       .catch((error) => {
         toast(error, {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

@@ -13,7 +13,7 @@ export default function AdminLogin() {
     if (!values.email || !values.password) {
       toast("Please fill all input fiels", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -31,7 +31,7 @@ export default function AdminLogin() {
       } else {
         toast("Your email or password is incorrect", {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

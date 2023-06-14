@@ -15,6 +15,7 @@ export default function AdminItems(props) {
               key={index}
               className="container mt-4 py-3 blog"
             >
+              <pre>{post.date}</pre>
               <img
                 src={post.url}
                 alt=""

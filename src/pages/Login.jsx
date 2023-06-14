@@ -16,7 +16,7 @@ export default function Login() {
     if (!values.email) {
       toast('Please enter your email', {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -34,7 +34,7 @@ export default function Login() {
         setButtonDisable(false);
         toast("Password reset email sent. Please check your inbox.", {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -45,9 +45,9 @@ export default function Login() {
       })
       .catch((error) => {
         setButtonDisable(false);
-        toast(error.message, {
+        toast(error, {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -61,7 +61,7 @@ export default function Login() {
     if (!values.email || !values.password) {
       toast('Please fill all the input field', {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -77,7 +77,7 @@ export default function Login() {
         setButtonDisable(false);
         toast("You Are Successfully Login as a User", {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -89,9 +89,9 @@ export default function Login() {
       })
       .catch((err) => {
         setButtonDisable(false);
-        toast(err, {
+        toast(err.message, {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

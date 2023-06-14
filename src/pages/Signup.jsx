@@ -18,7 +18,7 @@ export default function Signup() {
     if (!values.name || !values.email || !values.password) {
       toast("Please fill the input field", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -42,7 +42,7 @@ export default function Signup() {
         setButtonDisable(false);
         toast(err, {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

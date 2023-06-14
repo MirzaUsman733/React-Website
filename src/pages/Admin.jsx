@@ -40,6 +40,9 @@ export default function Admin() {
   useEffect(() => {
     fetchBlogPosts();
   }, []);
+  const dayjs = require('dayjs');
+  const currentDate = dayjs();
+  const formattedDate = currentDate.format('MMMM D, YYYY h:mm A');
   const submithandler = async (e) => {
     e.preventDefault();
     let data = {
@@ -47,6 +50,7 @@ export default function Admin() {
       message: messageRef.current.value,
       url: urlRef.current.value,
       txt: editorRef.current.getContent(),
+      date: formattedDate,
     };
 
     if (
@@ -57,7 +61,7 @@ export default function Admin() {
     ) {
       toast("Data Submitted", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

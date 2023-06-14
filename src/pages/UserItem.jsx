@@ -39,7 +39,7 @@ export default function UserItem({ posts, user }) {
     if (!user) {
       toast('Please Sign In to like the post', {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -69,7 +69,7 @@ export default function UserItem({ posts, user }) {
     } catch (error) {
       toast(error, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -102,16 +102,6 @@ export default function UserItem({ posts, user }) {
     if (event.key === "Enter") {
       event.preventDefault();
       handleAddComment(index, postId);
-      toast('Congrats, You enter the comment', {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        });
     }
   };
 
@@ -120,7 +110,7 @@ export default function UserItem({ posts, user }) {
     if (!comment) {
       toast('Please Write the comment in the comment box', {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -148,7 +138,7 @@ export default function UserItem({ posts, user }) {
       });
       toast('Congrats, You enter the comment', {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -175,7 +165,7 @@ export default function UserItem({ posts, user }) {
     } catch (error) {
       toast(error, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -217,7 +207,7 @@ export default function UserItem({ posts, user }) {
     } catch (error) {
       toast(error, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -227,7 +217,6 @@ export default function UserItem({ posts, user }) {
         });
     }
   };
-
   return (
     <>
       <div>
@@ -239,7 +228,7 @@ export default function UserItem({ posts, user }) {
               key={index}
               className="container mt-4 py-3 blog"
             >
-              <p style={{fontSize: 13}}><b>Author:</b> Mr. Muhammad Usman</p>
+              <p style={{fontSize: 13}}><b>Author:</b> &nbsp; <i> Mr. Muhammad Usman </i> - {post.date} </p>
               <img
                 src={post.url}
                 alt=""
@@ -260,9 +249,8 @@ export default function UserItem({ posts, user }) {
                 </Link>
                 </h4>
                 
-                <p  dangerouslySetInnerHTML={{__html: post.txt.slice(0,150)}}
-                />
-                <Link to={`/blog/${post.id}`} className="btn border-1 border-black">Read More <MdReadMore size={25}/></Link>
+                <p className="edt" dangerouslySetInnerHTML={{__html: post.txt}}/>
+                <Link to={`/blog/${post.id}`} className="btn btn-outline-light text-black border-1 border-black">Read More <MdReadMore size={25}/></Link>
               </div>
               <button style={likeStyle}>
                 <span

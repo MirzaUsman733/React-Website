@@ -41,7 +41,7 @@ export default function BlogItems({ posts, user }) {
         } else {
           toast("Post does not exist", {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 2500,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -69,7 +69,6 @@ export default function BlogItems({ posts, user }) {
     border: "none",
     display: "inline-block",
     backgroundColor: "rgba(250, 250, 250, 0.116)",
-    // opacity: 0.4,
     marginTop: 10,
   };
 
@@ -77,7 +76,7 @@ export default function BlogItems({ posts, user }) {
     if (!user) {
       toast("Please Sign In to like the post", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -99,15 +98,10 @@ export default function BlogItems({ posts, user }) {
         });
       }
       setIsActive((prevState) => !prevState);
-      // setIsActive((prevState) => {
-      //   let updatedState = [...prevState];
-      //   updatedState = !prevState;
-      //   return updatedState;
-      // });
     } catch (error) {
       toast(error, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -140,18 +134,8 @@ export default function BlogItems({ posts, user }) {
   };
   const handleKeyPress = async(event) => {
     if (event.key === 'Enter') {
-      // Perform the desired action, e.g., submit data
      handleAddComment();
-     toast('Congrats, You enter the comment', {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      });
+     
   };
     }
   
@@ -160,7 +144,7 @@ export default function BlogItems({ posts, user }) {
     if (!comment) {
       toast("Please write a comment in the comment box", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -174,7 +158,7 @@ export default function BlogItems({ posts, user }) {
     if (!user || !user.uid) {
       toast("User is not available", {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -202,7 +186,7 @@ export default function BlogItems({ posts, user }) {
       });
       toast('Congrats, You enter the comment', {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -228,9 +212,9 @@ export default function BlogItems({ posts, user }) {
         comments: arrayRemove(comment),
       });
     } catch (error) {
-      toast(error, {
+      toast(error.message, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -272,7 +256,7 @@ export default function BlogItems({ posts, user }) {
     } catch (error) {
       toast(error, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2500,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -286,7 +270,7 @@ export default function BlogItems({ posts, user }) {
     navigate("/user");
     toast('Back to User', {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 2500,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,

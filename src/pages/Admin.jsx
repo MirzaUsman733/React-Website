@@ -31,7 +31,7 @@ export default function Admin() {
   };
 
   async function fetchBlogPosts() {
-    // setIsLoading(true);
+    
     const querySnapshot = await getDocs(collection(firestore, "bloging"));
     const posts = querySnapshot.docs.map((doc) => doc.data());
     return posts;

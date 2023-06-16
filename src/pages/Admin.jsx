@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { firestore } from "../firebase";
@@ -7,17 +7,18 @@ import { addDoc, collection, getDocs } from "@firebase/firestore";
 import Items from "./Items";
 import Spinner from "./Spinner";
 import UpperFooter from "./UpperFooter";
-
+import { useQuery,useMutation } from "react-query";
 export default function Admin() {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const contentRef = useRef();
   const messageRef = useRef();
   const urlRef = useRef();
   const editorRef = useRef(null);
+  const {data: blogPosts ,isLoading} = useQuery("blogPosts",fetchBlogPosts)
 
   const messagesRef = collection(firestore, "bloging");
 
-  const [blogPosts, setBlogPosts] = useState([]);
+  // const [blogPosts, setBlogPosts] = useState([]);
   const inputStyle = {
     width: 200,
     marginTop: 10,
@@ -30,16 +31,27 @@ export default function Admin() {
   };
 
   async function fetchBlogPosts() {
-    setIsLoading(true);
+    // setIsLoading(true);
     const querySnapshot = await getDocs(collection(firestore, "bloging"));
     const posts = querySnapshot.docs.map((doc) => doc.data());
-    setBlogPosts(posts);
-    setIsLoading(false);
+    return posts;
+    // setBlogPosts(posts);
+    // setIsLoading(false);
   }
 
   useEffect(() => {
     fetchBlogPosts();
   }, []);
+  const mutation = useMutation((data) => addDoc(messagesRef, data), {
+    onSuccess: () => {
+      contentRef.current.value = '';
+      messageRef.current.value = '';
+      urlRef.current.value = '';
+      editorRef.current.setContent('');
+      fetchBlogPosts();
+    },
+  });
+  
   const dayjs = require('dayjs');
   const currentDate = dayjs();
   const formattedDate = currentDate.format('MMMM D, YYYY h:mm A');
@@ -69,17 +81,18 @@ export default function Admin() {
         progress: undefined,
         theme: "dark",
       });
-      try {
-        await addDoc(messagesRef, data);
-        contentRef.current.value = "";
-        messageRef.current.value = "";
-        urlRef.current.value = "";
-        editorRef.current.setContent("");
-        fetchBlogPosts();
-        setIsLoading(false);
-      } catch (e) {
-        console.log(e);
-      }
+      mutation.mutate(data);
+      // try {
+      //   await addDoc(messagesRef, data);
+      //   contentRef.current.value = "";
+      //   messageRef.current.value = "";
+      //   urlRef.current.value = "";
+      //   editorRef.current.setContent("");
+      //   fetchBlogPosts();
+      //   // setIsLoading(false);
+      // } catch (e) {
+      //   console.log(e);
+      // }
     } else {
     }
   };
@@ -95,9 +108,10 @@ export default function Admin() {
         }}
         onSubmit={submithandler}
       >
-        <label>Enter Image Url: &emsp; &nbsp;</label>
+        <label htmlFor="url">Enter Image Url: &emsp; &nbsp;</label>
         <input
           type="text"
+          id="url"
           ref={urlRef}
           name="url"
           placeholder="Write Url"
@@ -105,9 +119,10 @@ export default function Admin() {
           style={inputStyle}
         />
         <br />
-        <label>Enter Title: &emsp; &emsp; &emsp; &nbsp;</label>
+        <label htmlFor="title">Enter Title: &emsp; &emsp; &emsp; &nbsp;</label>
         <input
           type="text"
+          id="title"
           ref={contentRef}
           name="title"
           placeholder="Title"
@@ -115,9 +130,10 @@ export default function Admin() {
           style={inputStyle}
         />
         <br />
-        <label>Enter Description: &emsp;</label>
+        <label htmlFor="description">Enter Description: &emsp;</label>
         <input
           type="text"
+          id="description"
           ref={messageRef}
           name="description"
           placeholder="description"
@@ -133,11 +149,11 @@ export default function Admin() {
           init={{
             height: 500,
             menubar: false,
-            plugins: [
-              "advlist autolink lists link image charmap print preview anchor",
-              "searchreplace visualblocks code fullscreen",
-              "insertdatetime media table paste code help wordcount",
-            ],
+            // plugins: [
+            //   "advlist autolink lists link image charmap print preview anchor",
+            //   "searchreplace visualblocks code fullscreen",
+            //   "insertdatetime media table paste code help wordcount",
+            // ],
             toolbar:
               "undo redo | formatselect | " +
               "bold italic backcolor | alignleft aligncenter " +

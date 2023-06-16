@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 import { firestore } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import UserItem from "./UserItem";
@@ -12,8 +12,10 @@ import UpperItems from "./UpperItems";
 import UpperFooter from "./UpperFooter";
 import SocialPlugin from "./SocialPlugin";
 import Iframe from "./Iframe";
+import { useQuery } from "react-query";
 
 export default function User() {
+  const {data: blogPosts ,isLoading} = useQuery("blogPosts",fetchBlogPosts)
   // const navigate = useNavigate();
   const auth = getAuth();
   const [user, setUser] = useState(null);
@@ -31,18 +33,19 @@ export default function User() {
   }, [auth]);
 
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [blogPosts, setBlogPosts] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [blogPosts, setBlogPosts] = useState([]);
 
   async function fetchBlogPosts() {
-    setIsLoading(true);
+    // setIsLoading(true);
     const querySnapshot = await getDocs(collection(firestore, "bloging"));
     const posts = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    setBlogPosts(posts);
-    setIsLoading(false);
+    return posts
+    // setBlogPosts(posts);
+    // setIsLoading(false);
   }
 
   useEffect(() => {

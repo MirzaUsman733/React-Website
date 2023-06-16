@@ -17,7 +17,8 @@ export default function UserItem({ posts, user }) {
   const [comments, setComments] = useState(posts.map(() => []));
   const [isActive, setIsActive] = useState(posts.map(() => false));
   const [focusedIndex, setFocusedIndex] = useState(-1);
-
+  const [visiblePosts, setVisiblePosts] = useState(10);
+  
   useEffect(() => {
     if (user) {
       const likedPosts = user.likedPosts || [];
@@ -217,12 +218,15 @@ export default function UserItem({ posts, user }) {
         });
     }
   };
+  const handleLoadMore = () => {
+    setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 10);
+  };
   return (
     <>
       <div>
         <ul className="ms-0 ps-0">
           <h2 className=" mt-3">All Blogs...</h2>
-          {posts.map((post, index) => (
+          {posts.slice(0, visiblePosts).map((post, index) => (
             <li
               style={{ listStyleType: "none" }}
               key={index}
@@ -342,6 +346,15 @@ export default function UserItem({ posts, user }) {
             </li>
           ))}
         </ul>
+        <div className="text-center">
+
+        {visiblePosts < posts.length && (
+          <button className="btn btn-primary" onClick={handleLoadMore}>
+            Load More
+          </button>
+        )}
+        </div>
+        
       </div>
     </>
   );

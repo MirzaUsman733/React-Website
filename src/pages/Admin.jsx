@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { firestore } from "../firebase";
@@ -7,18 +7,17 @@ import { addDoc, collection, getDocs } from "@firebase/firestore";
 import Items from "./Items";
 import Spinner from "./Spinner";
 import UpperFooter from "./UpperFooter";
-import { useQuery,useMutation } from "react-query";
+import { useQuery, useMutation } from "react-query";
+// import AdminItems from "./AdminItems";
 export default function Admin() {
   // const [isLoading, setIsLoading] = useState(false);
   const contentRef = useRef();
   const messageRef = useRef();
   const urlRef = useRef();
   const editorRef = useRef(null);
-  const {data: blogPosts ,isLoading} = useQuery("blogPosts",fetchBlogPosts)
+  const { data: blogPosts, isLoading } = useQuery("blogPosts", fetchBlogPosts);
 
   const messagesRef = collection(firestore, "bloging");
-
-  // const [blogPosts, setBlogPosts] = useState([]);
   const inputStyle = {
     width: 200,
     marginTop: 10,
@@ -31,30 +30,23 @@ export default function Admin() {
   };
 
   async function fetchBlogPosts() {
-    
     const querySnapshot = await getDocs(collection(firestore, "bloging"));
     const posts = querySnapshot.docs.map((doc) => doc.data());
     return posts;
-    // setBlogPosts(posts);
-    // setIsLoading(false);
   }
-
-  useEffect(() => {
-    fetchBlogPosts();
-  }, []);
   const mutation = useMutation((data) => addDoc(messagesRef, data), {
     onSuccess: () => {
-      contentRef.current.value = '';
-      messageRef.current.value = '';
-      urlRef.current.value = '';
-      editorRef.current.setContent('');
+      contentRef.current.value = "";
+      messageRef.current.value = "";
+      urlRef.current.value = "";
+      editorRef.current.setContent("");
       fetchBlogPosts();
     },
   });
-  
-  const dayjs = require('dayjs');
+
+  const dayjs = require("dayjs");
   const currentDate = dayjs();
-  const formattedDate = currentDate.format('MMMM D, YYYY h:mm A');
+  const formattedDate = currentDate.format("MMMM D, YYYY h:mm A");
   const submithandler = async (e) => {
     e.preventDefault();
     let data = {
@@ -82,18 +74,18 @@ export default function Admin() {
         theme: "dark",
       });
       mutation.mutate(data);
-      // try {
-      //   await addDoc(messagesRef, data);
-      //   contentRef.current.value = "";
-      //   messageRef.current.value = "";
-      //   urlRef.current.value = "";
-      //   editorRef.current.setContent("");
-      //   fetchBlogPosts();
-      //   // setIsLoading(false);
-      // } catch (e) {
-      //   console.log(e);
-      // }
+      
     } else {
+      toast("Data Cannot Submit. Check the Length of each input", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
   return (

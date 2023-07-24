@@ -1,12 +1,10 @@
-import React,{useState,useEffect} from "react";
-// import { useSelector,useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-// import { setUser, clearUser } from './authSlice';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -24,21 +22,6 @@ export default function Navbar() {
       unsubscribe();
     };
   }, []);
-  // const user = useSelector((state) => state.auth);
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       dispatch(setUser(user));
-  //     } else {
-  //       dispatch(clearUser());
-  //     }
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [dispatch]);  
   const handleSignout = () => {
     signOut(auth)
       .then(() => {
@@ -65,6 +48,9 @@ export default function Navbar() {
           progress: undefined,
           theme: "dark",
         });
+      })
+      .finally(() => {
+        setUser(null);
       });
   };
   return (
@@ -104,11 +90,15 @@ export default function Navbar() {
                     Write
                   </Link>
                 </li>
-                <li className="nav-item mx-2">
-                  <Link className="nav-link active" to="login">
-                    Sign In
-                  </Link>
-                </li>
+                {!user ? (
+                  <li className="nav-item mx-2">
+                    <Link className="nav-link active" to="login">
+                      Sign In
+                    </Link>
+                  </li>
+                ) : (
+                  ""
+                )}
                 <li className="nav-item mx-2">
                   <Link
                     to="login"
@@ -116,24 +106,24 @@ export default function Navbar() {
                   >
                     Get Started
                   </Link>
-
                 </li>
-                {user ? <li className="nav-item ms-2">
-                  <Link
-                  onClick={handleSignout}
-                    to="/login"
-                    className="nav-link active btn btn-danger text-white px-3 rounded-pill"
-                  >
-                    Sign Out
-                  </Link>
-                  
-                </li>
-: ""}
+                {user ? (
+                  <li className="nav-item ms-2">
+                    <Link
+                      onClick={handleSignout}
+                      to="/login"
+                      className="nav-link active btn btn-danger text-white px-3 rounded-pill"
+                    >
+                      Sign Out
+                    </Link>
+                  </li>
+                ) : (
+                  ""
+                )}
               </ul>
             </div>
           </div>
         </div>
-        
       </nav>
     </div>
   );

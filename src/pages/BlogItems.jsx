@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 import { firestore } from "../firebase";
 import {
   doc,
@@ -22,42 +23,29 @@ import Spinner from "./Spinner";
 import { MdOutlineAddComment } from "react-icons/md";
 export default function BlogItems({ posts, user }) {
   const { postId } = useParams();
-  const [post, setPost] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [post, setPost] = useState([]);
+  // const [isLoading, setIsLoading] = useState(false);
   const [commentValue, setCommentValue] = useState("");
   const [comments, setComments] = useState([]);
   const [isActive, setIsActive] = useState();
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const postRef = doc(firestore, "bloging", postId);
-        const postDoc = await getDoc(postRef);
-        if (postDoc.exists) {
-          const postData = postDoc.data();
-          setPost(postData);
-          setIsLoading(false);
-          setComments(postData.comments || []);
-        } else {
-          toast("Post does not exist", {
-            position: "top-right",
-            autoClose: 2500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          });
-        }
-      } catch (error) {
-        console.log(error);
+  const fetchPostData = async () => {
+    try {
+      const postRef = doc(firestore, "bloging", postId);
+      const postDoc = await getDoc(postRef);
+      if (postDoc.exists) {
+        const postData = postDoc.data();
+        setComments(postData.comments || []);
+        return postData;
+      } else {
+        throw new Error("Post does not exist");
       }
-    };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
 
-    fetchPost();
-  }, [postId]);
-
+  const { data: post, isLoading } = useQuery(["post", postId], fetchPostData);
   useEffect(() => {
     if (user && user.likedPosts && posts) {
       const likedPosts = user.likedPosts || [];
@@ -132,13 +120,12 @@ export default function BlogItems({ posts, user }) {
     paddingTop: 6,
     paddingBottom: 7,
   };
-  const handleKeyPress = async(event) => {
-    if (event.key === 'Enter') {
-     handleAddComment();
-     
-  };
+  const handleKeyPress = async (event) => {
+    if (event.key === "Enter") {
+      handleAddComment();
     }
-  
+  };
+
   const handleAddComment = async () => {
     const comment = commentValue.trim();
     if (!comment) {
@@ -175,7 +162,7 @@ export default function BlogItems({ posts, user }) {
         authorName: user.displayName,
         text: comment,
       };
-      
+
       const updatedComments = [...comments, newComment];
       let updatedCommentsState = [...comments];
       updatedCommentsState = updatedComments;
@@ -184,7 +171,7 @@ export default function BlogItems({ posts, user }) {
       await updateDoc(doc(firestore, "bloging", postId), {
         comments: arrayUnion(newComment),
       });
-      toast('Congrats, You enter the comment', {
+      toast("Congrats, You enter the comment", {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,
@@ -193,9 +180,8 @@ export default function BlogItems({ posts, user }) {
         draggable: true,
         progress: undefined,
         theme: "dark",
-        });
+      });
       setCommentValue("");
-      
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -203,16 +189,14 @@ export default function BlogItems({ posts, user }) {
 
   const handleDeleteComment = async (comment, postId) => {
     try {
-      const updatedComments = comments.filter((c) => c !== comment);
-      let updatedCommentsState = [...comments];
-      updatedCommentsState = updatedComments;
-      setComments(updatedCommentsState);
-
+      const updatedComments = comments.filter((c) => c.id !== comment.id);
+      setComments(updatedComments);
+  
       await updateDoc(doc(firestore, "bloging", postId), {
         comments: arrayRemove(comment),
       });
     } catch (error) {
-      toast(error.message, {
+      toast.error(error.message, {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,
@@ -224,6 +208,7 @@ export default function BlogItems({ posts, user }) {
       });
     }
   };
+  
 
   const handleUpdateComment = async (comment, postId) => {
     const updatedCommentText = prompt(
@@ -233,28 +218,26 @@ export default function BlogItems({ posts, user }) {
     if (updatedCommentText === null || updatedCommentText.trim() === "") {
       return;
     }
-
+  
     try {
       const updatedComment = {
         ...comment,
         text: updatedCommentText,
       };
-
+  
       const updatedComments = comments.map((c) =>
         c === comment ? updatedComment : c
       );
-      let updatedCommentsState = [...comments];
-      updatedCommentsState = updatedComments;
-      setComments(updatedCommentsState);
-
+      setComments(updatedComments);
+  
       await updateDoc(doc(firestore, "bloging", postId), {
-        comments: arrayUnion(updatedComment),
+        comments: arrayRemove(comment), // Remove the old comment
       });
       await updateDoc(doc(firestore, "bloging", postId), {
-        comments: arrayRemove(comment),
+        comments: arrayUnion(updatedComment), // Add the updated comment
       });
     } catch (error) {
-      toast(error, {
+      toast.error(error.message, {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,
@@ -266,9 +249,10 @@ export default function BlogItems({ posts, user }) {
       });
     }
   };
+  
   const handleClick = () => {
     navigate("/user");
-    toast('Back to User', {
+    toast("Back to User", {
       position: "top-right",
       autoClose: 2500,
       hideProgressBar: false,
@@ -277,7 +261,7 @@ export default function BlogItems({ posts, user }) {
       draggable: true,
       progress: undefined,
       theme: "dark",
-      });
+    });
   };
 
   return (
@@ -309,7 +293,7 @@ export default function BlogItems({ posts, user }) {
             <button style={likeStyle}>
               <span
                 style={{
-                  color: isActive ? "#8b0000" : "black",
+                  color: isActive ? "#1877f2" : "black",
                   opacity: isActive ? 100 : 0.6,
                 }}
                 onClick={() => handleButton(post.id)}
@@ -327,7 +311,7 @@ export default function BlogItems({ posts, user }) {
               </span>
             </button>
             <button
-              class="btn btn-light d-inline-block"
+              className="btn btn-light d-inline-block"
               type="button"
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasResponsive"
@@ -340,28 +324,28 @@ export default function BlogItems({ posts, user }) {
             </div>
             <div dangerouslySetInnerHTML={{ __html: post.txt }} />
             <div
-              class="offcanvas offcanvas-end"
-              tabindex="-1"
+              className="offcanvas offcanvas-end"
+              tabIndex="-1"
               id="offcanvasResponsive"
               aria-labelledby="offcanvasResponsiveLabel"
             >
-              <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">
+              <div className="offcanvas-header">
+                <h5 className="offcanvas-title" id="offcanvasResponsiveLabel">
                   Responses
                 </h5>
                 <button
                   type="button"
-                  class="btn-close"
+                  className="btn-close"
                   data-bs-dismiss="offcanvas"
                   data-bs-target="#offcanvasResponsive"
                   aria-label="Close"
                 ></button>
               </div>
-              <div class="offcanvas-body">
+              <div className="offcanvas-body">
                 <div>
                   <div>
                     <input
-                     onKeyPress={handleKeyPress}
+                      onKeyPress={handleKeyPress}
                       className="rounded"
                       type="text"
                       value={commentValue}
@@ -375,7 +359,7 @@ export default function BlogItems({ posts, user }) {
                       className="btn btn-secondary"
                       onClick={() => handleAddComment(post.id)}
                     >
-                      Add Comment <MdOutlineAddComment size={20}/>
+                      Add Comment <MdOutlineAddComment size={20} />
                     </button>
                     <h3 className="mt-5 text-success-emphasis">
                       Most Recents...
@@ -383,7 +367,8 @@ export default function BlogItems({ posts, user }) {
                     {comments && comments.length > 0 && (
                       <ul className="mt-3">
                         {comments.map((comment, commentIndex) => (
-                          <li className="my-3"
+                          <li
+                            className="my-3"
                             style={{ listStyleType: "square" }}
                             key={commentIndex}
                           >

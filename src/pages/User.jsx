@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from "react";
-// import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+import { useQuery } from "react-query";
 import { firestore } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import UserItem from "./UserItem";
 import SecondItem from "./SecondItem";
 import Spinner from "./Spinner";
-import { getAuth} from "firebase/auth";
-// import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 import UpperItems from "./UpperItems";
 import UpperFooter from "./UpperFooter";
 import SocialPlugin from "./SocialPlugin";
 import Iframe from "./Iframe";
-import { useQuery } from "react-query";
-
 export default function User() {
-  const {data: blogPosts ,isLoading} = useQuery("blogPosts",fetchBlogPosts)
-  // const navigate = useNavigate();
+  const { data: blogPosts, isLoading } = useQuery("blogPosts", fetchBlogPosts);
   const auth = getAuth();
   const [user, setUser] = useState(null);
 
@@ -32,7 +27,6 @@ export default function User() {
     return () => unsubscribe();
   }, [auth]);
 
-
   // const [isLoading, setIsLoading] = useState(false);
   // const [blogPosts, setBlogPosts] = useState([]);
 
@@ -43,20 +37,20 @@ export default function User() {
       id: doc.id,
       ...doc.data(),
     }));
-    return posts
+    return posts;
     // setBlogPosts(posts);
     // setIsLoading(false);
   }
 
-  useEffect(() => {
-    fetchBlogPosts();
-  }, []);
+  // useEffect(() => {
+  //   fetchBlogPosts();
+  // }, []);
 
   return (
     <div className="container-fluid m-0 pb-0 px-0">
       <h1 className="text-center  my-4">Blog Posts Website</h1>
 
-      {isLoading ? (
+      {isLoading && !blogPosts ? (
         <Spinner />
       ) : (
         <div className="container">
@@ -69,6 +63,7 @@ export default function User() {
               Blogs About Life
             </span>
           </h1>
+
           <div className="row">
             <div className="ms-0 ps-0 col-12 col-md-8">
               <UserItem posts={blogPosts} user={user} />

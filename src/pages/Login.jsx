@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Input from "./Input";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword,sendPasswordResetEmail } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 export default function Login() {
   const navigate = useNavigate();
   const [values, setValues] = useState({
@@ -14,9 +17,9 @@ export default function Login() {
   const [buttonDisable, setButtonDisable] = useState(false);
   const handleForgotPassword = () => {
     if (!values.email) {
-      toast('Please enter your email', {
+      toast("Please enter your email", {
         position: "top-right",
-        autoClose: 2500,
+        autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -34,7 +37,7 @@ export default function Login() {
         setButtonDisable(false);
         toast("Password reset email sent. Please check your inbox.", {
           position: "top-right",
-          autoClose: 2500,
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -45,9 +48,9 @@ export default function Login() {
       })
       .catch((error) => {
         setButtonDisable(false);
-        toast(error, {
+        toast(error.message, {
           position: "top-right",
-          autoClose: 2500,
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -59,50 +62,54 @@ export default function Login() {
   };
   const submitHandler = () => {
     if (!values.email || !values.password) {
-      toast('Please fill all the input field', {
+      toast("Please fill all the input field", {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
         theme: "dark",
-        });
+      });
       return;
     }
     setButtonDisable(true);
     signInWithEmailAndPassword(auth, values.email, values.password)
-      .then(async (res) => {
+      .then(() => {
         setButtonDisable(false);
         toast("You Are Successfully Login as a User", {
           position: "top-right",
-          autoClose: 2000,
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
           theme: "dark",
-          });
+        });
         navigate("/user");
       })
       .catch((err) => {
         setButtonDisable(false);
-        toast(err.message, {
+        toast(err, {
           position: "top-right",
-          autoClose: 2000,
+          autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
           theme: "dark",
-          });
+        });
       });
   };
   return (
-    <div id="center" className="center text-center text-dark my-5" style={{backgroundColor:"White"}}>
+    <div
+      id="center"
+      className="center text-center text-dark my-5"
+      style={{ backgroundColor: "White" }}
+    >
       <div id="sme">
         <header id="header">
           <h1 className="text-center text-uppercase mt-5">User login</h1>
@@ -125,7 +132,9 @@ export default function Login() {
               setValues((prev) => ({ ...prev, password: event.target.value }))
             }
           />
-          <p className="text-end forget" onClick={handleForgotPassword}>Forget Password</p>
+          <p className="text-end forget" onClick={handleForgotPassword}>
+            Forget Password
+          </p>
           <button
             className="btnLg btn btn-primary fs-5 mb-5"
             onClick={submitHandler}

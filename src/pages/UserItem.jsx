@@ -1,24 +1,19 @@
 import "./UserItem.css";
 import React, { useState, useEffect } from "react";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { firestore } from "../firebase";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { Link } from "react-router-dom";
-import {
-  AiOutlineEdit,
-  AiOutlineDelete,
-  AiOutlineLike,
-} from "react-icons/ai";
-
-import { MdOutlineAddComment,MdReadMore } from "react-icons/md";
+import { AiOutlineEdit, AiOutlineDelete, AiOutlineLike } from "react-icons/ai";
+import { MdOutlineAddComment, MdReadMore } from "react-icons/md";
 export default function UserItem({ posts, user }) {
   const [commentValue, setCommentValue] = useState("");
   const [comments, setComments] = useState(posts.map(() => []));
   const [isActive, setIsActive] = useState(posts.map(() => false));
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const [visiblePosts, setVisiblePosts] = useState(10);
-  
+
   useEffect(() => {
     if (user) {
       const likedPosts = user.likedPosts || [];
@@ -31,14 +26,12 @@ export default function UserItem({ posts, user }) {
     border: "none",
     display: "block",
     backgroundColor: "rgba(250, 250, 250, 0.116)",
-    // opacity : 0.8,
     marginTop: 10,
   };
- 
-    
+
   const handleButton = async (index, postId) => {
     if (!user) {
-      toast('Please Sign In to like the post', {
+      toast("Please Sign In to like the post", {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,
@@ -47,7 +40,7 @@ export default function UserItem({ posts, user }) {
         draggable: true,
         progress: undefined,
         theme: "dark",
-        });
+      });
       return;
     }
 
@@ -77,7 +70,7 @@ export default function UserItem({ posts, user }) {
         draggable: true,
         progress: undefined,
         theme: "dark",
-        });
+      });
     }
   };
 
@@ -109,7 +102,7 @@ export default function UserItem({ posts, user }) {
   const handleAddComment = async (index, postId) => {
     const comment = commentValue.trim();
     if (!comment) {
-      toast('Please Write the comment in the comment box', {
+      toast("Please Write the comment in the comment box", {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,
@@ -118,7 +111,7 @@ export default function UserItem({ posts, user }) {
         draggable: true,
         progress: undefined,
         theme: "dark",
-        });
+      });
       return;
     }
 
@@ -137,7 +130,7 @@ export default function UserItem({ posts, user }) {
       await updateDoc(doc(firestore, "bloging", postId), {
         comments: arrayUnion(newComment),
       });
-      toast('Congrats, You enter the comment', {
+      toast("Congrats, You enter the comment", {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,
@@ -146,7 +139,7 @@ export default function UserItem({ posts, user }) {
         draggable: true,
         progress: undefined,
         theme: "dark",
-        });
+      });
       setCommentValue("");
     } catch (error) {
       console.error("Error adding comment:", error);
@@ -173,7 +166,7 @@ export default function UserItem({ posts, user }) {
         draggable: true,
         progress: undefined,
         theme: "dark",
-        });
+      });
     }
   };
 
@@ -215,12 +208,15 @@ export default function UserItem({ posts, user }) {
         draggable: true,
         progress: undefined,
         theme: "dark",
-        });
+      });
     }
   };
   const handleLoadMore = () => {
     setVisiblePosts((prevVisiblePosts) => prevVisiblePosts + 10);
   };
+  if (!user) {
+    return;
+  }
   return (
     <>
       <div>
@@ -232,7 +228,9 @@ export default function UserItem({ posts, user }) {
               key={index}
               className="container mt-4 py-3 blog"
             >
-              <p style={{fontSize: 13}}><b>Author:</b> &nbsp; <i> Mr. Muhammad Usman </i> - {post.date} </p>
+              <p style={{ fontSize: 13 }}>
+                <b>Author:</b> &nbsp; <i> Mr. Muhammad Usman </i> - {post.date}{" "}
+              </p>
               <img
                 src={post.url}
                 alt=""
@@ -248,20 +246,31 @@ export default function UserItem({ posts, user }) {
                     fontWeight: "bold",
                   }}
                 >
-                  <Link to={`/blog/${post.id}`} style={{textDecoration: "none", color: "black"}}>
-                  {post.message ? post.message.slice(0, 45) : ""}...
-                </Link>
+                  <Link
+                    to={`/blog/${post.id}`}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    {post.message ? post.message.slice(0, 45) : ""}...
+                  </Link>
                 </h4>
-                
-                <p className="edt" dangerouslySetInnerHTML={{__html: post.txt}}/>
-                <Link to={`/blog/${post.id}`} className="btn btn-outline-light text-black border-1 border-black">Read More <MdReadMore size={25}/></Link>
+
+                <p
+                  className="edt"
+                  dangerouslySetInnerHTML={{ __html: post.txt }}
+                />
+                <Link
+                  to={`/blog/${post.id}`}
+                  className="btn btn-outline-light text-black border-1 border-black"
+                >
+                  Read More <MdReadMore size={25} />
+                </Link>
               </div>
               <button style={likeStyle}>
                 <span
-                  className="" 
+                  className=""
                   style={{
-                    color: isActive[index] ? "#8b0000" : "black",
-                    opacity: isActive[index] ? 100 : 0.6
+                    color: isActive[index] ? "#1877f2" : "black",
+                    opacity: isActive[index] ? 100 : 0.6,
                   }}
                   onClick={() => handleButton(index, post.id)}
                 >
@@ -282,7 +291,7 @@ export default function UserItem({ posts, user }) {
                   <ul>
                     {comments[index].map((comment, commentIndex) => (
                       <li
-                      className="my-2"
+                        className="my-2"
                         style={{ listStyleType: "square" }}
                         key={commentIndex}
                       >
@@ -290,12 +299,13 @@ export default function UserItem({ posts, user }) {
                         {comment.text}
                         {comment.authorId === user.uid && (
                           <>
-                            <button style={{
-                                    paddingTop: 2,
-                                    paddingBottom: 2,
-                                    paddingLeft: 8,
-                                    paddingRight: 8,
-                                  }}
+                            <button
+                              style={{
+                                paddingTop: 2,
+                                paddingBottom: 2,
+                                paddingLeft: 8,
+                                paddingRight: 8,
+                              }}
                               className="btn btn-success mx-2"
                               onClick={() =>
                                 handleUpdateComment(index, post.id, comment)
@@ -304,12 +314,12 @@ export default function UserItem({ posts, user }) {
                               <AiOutlineEdit />
                             </button>
                             <button
-                            style={{
-                              paddingTop: 2,
-                              paddingBottom: 2,
-                              paddingLeft: 8,
-                              paddingRight: 8,
-                            }}
+                              style={{
+                                paddingTop: 2,
+                                paddingBottom: 2,
+                                paddingLeft: 8,
+                                paddingRight: 8,
+                              }}
                               className="btn btn-danger"
                               onClick={() =>
                                 handleDeleteComment(index, post.id, comment)
@@ -325,7 +335,7 @@ export default function UserItem({ posts, user }) {
                 )}
 
                 <input
-                className="rounded"
+                  className="rounded"
                   type="text"
                   onKeyDown={(e) => handleCommentKeyDown(e, index, post.id)}
                   value={focusedIndex === index ? commentValue : ""}
@@ -340,21 +350,19 @@ export default function UserItem({ posts, user }) {
                   className="btn btn-secondary"
                   onClick={() => handleAddComment(index, post.id)}
                 >
-                  Add Comment  <MdOutlineAddComment size={20} />
+                  Add Comment <MdOutlineAddComment size={20} />
                 </button>
               </div>
             </li>
           ))}
         </ul>
         <div className="text-center">
-
-        {visiblePosts < posts.length && (
-          <button className="btn btn-primary" onClick={handleLoadMore}>
-            Load More
-          </button>
-        )}
+          {visiblePosts < posts.length && (
+            <button className="btn btn-primary" onClick={handleLoadMore}>
+              Load More
+            </button>
+          )}
         </div>
-        
       </div>
     </>
   );

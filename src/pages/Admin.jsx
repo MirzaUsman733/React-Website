@@ -8,9 +8,7 @@ import Items from "./Items";
 import Spinner from "./Spinner";
 import UpperFooter from "./UpperFooter";
 import { useQuery, useMutation } from "react-query";
-// import AdminItems from "./AdminItems";
 export default function Admin() {
-  // const [isLoading, setIsLoading] = useState(false);
   const contentRef = useRef();
   const messageRef = useRef();
   const urlRef = useRef();
@@ -141,11 +139,6 @@ export default function Admin() {
           init={{
             height: 500,
             menubar: false,
-            // plugins: [
-            //   "advlist autolink lists link image charmap print preview anchor",
-            //   "searchreplace visualblocks code fullscreen",
-            //   "insertdatetime media table paste code help wordcount",
-            // ],
             toolbar:
               "undo redo | formatselect | " +
               "bold italic backcolor | alignleft aligncenter " +

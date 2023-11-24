@@ -7,6 +7,13 @@
 main{
   flex: 1 0 auto;
 }
+*{
+  font-family: 'Roboto', sans-serif;
+  }
+  
+  body{
+    background-color: #F3F6FC;
+  }
 .edt{
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -34,27 +41,13 @@ main{
 .divBtn{
   width: 40%;
 }
-*{
-  font-family: 'Roboto', sans-serif;
-  }
-  
-  body{
-    background-color: #F3F6FC;
-  }
-  /* .center{
-    margin: auto;
-    margin-top: 100px;
-    height: 100%;
-    width: 50%;
-    color: black;
-    border-radius: 5px;
-  } */
-  #sme{
+
+#sme{
     width: 100%;
     margin: auto;
     display: flex;
     justify-content: center;
-  }
+}
   #txt{
     padding-left: 20px;
     width: 100%;
